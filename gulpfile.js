@@ -23,7 +23,6 @@ const highlight = require('highlight.js');
 let contents = [];
 
 
-
 // --------------------------------
 // Generate content
 // --------------------------------
@@ -44,13 +43,13 @@ function compare(propertyName) {
     }
 }
 
-gulp.task('content', function () {
+gulp.task('buildContent', function () {
 
     dir.readFiles('posts',
         function (err, content, next) {
             if (err) throw err;
-            console.log(content);
-            let header = content.split('---')[1].replace(/\n/g,'');
+            //console.log(content);
+            let header = content.split('---')[1].replace(/\n/g, '');
             let regTitle = /title:\s*(.*)date:/;
             let title = regTitle.exec(header)[1];
             let regDateAndTime = /date:\s*(\d{4}-\d{2}-\d{2}\s*\d{2}:\d{2}:\d{2})/;
@@ -59,12 +58,13 @@ gulp.task('content', function () {
             let regTag = /\b[a-z]+\b/gi;
             let arrTag = tags.match(regTag);
             let id = new Date(dateAndTime).getTime();
-
+            let URL = 'posts/' + title;
             let post = {
                 title: title,
                 dateAndTime: dateAndTime,
                 id: id,
-                tags: arrTag
+                tags: arrTag,
+                URL: URL
             }
             contents.push(post);
 
@@ -76,12 +76,9 @@ gulp.task('content', function () {
             console.log(contents);
 
 
-
-
-
-
-
-
+            gulp.src('./src/templates/layout/content.jade')
+                .pipe(plugins.jade({locals: {content: contents}}))
+                .pipe(gulp.dest('./dist/'));
 
 
         });
@@ -117,13 +114,13 @@ const srcPath = {
 const destPath = {
     style: './dist/styles/',
     script: './dist/scripts/',
-    base: './dist/'
+    posts: './dist/posts',
+    base: './dist'
 };
 
 // --------------------------------
 // JavaScript packing
 // --------------------------------
-
 
 function packjs(entry, dest, debug) {
     let webpackConfig = require(srcPath.webpackConfig);
@@ -192,24 +189,10 @@ function highlightCode(code, lang) {
 function layoutDiary(file) {
     let name = path.basename(file.path)
         .replace(path.extname(file.path), '');
-    let date = moment(new Date(name));
-
-    if (!date.isValid()) {
-        return _.assign({}, config, {
-            layout: srcPath.template + 'layout/plain-layout.jade',
-            title: name
-        });
-    } else if (name.length > 7) {   // full date
-        return _.assign({}, config, {
-            layout: srcPath.template + 'layout/diary-layout.jade',
-            title: date.format('MMMM D, YYYY')
-        });
-    } else {  // month summary
-        return _.assign({}, config, {
-            layout: srcPath.template + 'layout/month-layout.jade',
-            title: date.format('MMMM, YYYY')
-        });
-    }
+    return _.assign({}, config, {
+        layout: srcPath.template + 'layout/plain-layout.jade',
+        title: name
+    });
 }
 
 function generateDiary(layout) {
@@ -219,7 +202,7 @@ function generateDiary(layout) {
         .pipe(plugins.debug())
         .pipe(plugins.markdown({highlight: highlightCode}))
         .pipe(plugins.layout(layoutDiary))
-        .pipe(gulp.dest(destPath.base))
+        .pipe(gulp.dest(destPath.posts))
         .pipe(plugins.livereload());
 }
 
@@ -239,8 +222,8 @@ gulp.task('watch', ['server'], function () {
         srcPath.script + '**/*.js'], ['js-debug']);
 });
 
-gulp.task('build-debug', ['js-debug', 'markup', 'css-debug']);
-gulp.task('build', ['js', 'markup', 'css']);
+gulp.task('build-debug', ['js-debug', 'markup', 'css-debug', 'buildContent']);
+gulp.task('build', ['js', 'markup', 'css', 'buildContent']);
 
 // ------------------------
 //  Launch server
@@ -249,12 +232,12 @@ function serve(done) {
     http.createServer(
         st({
             path: destPath.base,
-            url: '/diary',
+            url: '/blog',
             index: 'index.html',
             cache: false
         })
     ).listen(8000, done);
-    console.log('Server listening on http://localhost:8000/diary/');
+    console.log('Server listening on http://localhost:8000/blog/');
 }
 
 gulp.task('server', ['build-debug'], serve);

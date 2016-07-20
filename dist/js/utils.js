@@ -37,12 +37,18 @@ function createXMLHTTPRequest() {
 function doGet(URL){
     var req = createXMLHTTPRequest();
     if(req){
+        req.setRequestHeader("Content-Type", "Content-Type: text/html;charset:utf-8;");
         req.open("GET", URL, true);
         req.onreadystatechange = function(){
             if(req.readyState == 4){
                 if(req.status == 200){
                     console.log(req.responseText);
-                    document.querySelector('#page-content').innerHTML = req.responseText;
+
+                    document.querySelector('#page-contents').innerHTML = req.responseText;
+                    document.querySelector('.backicon i').onclick = function () {
+                        getContent();
+                    }
+
                 }else{
                     console.log('error');
                 }
@@ -59,3 +65,42 @@ var getArticle = function (URL) {
     console.log(URL);
     doGet(URL);
 }
+
+var oHomePage = document.querySelector('#page-home');
+var animating = false;
+
+function run() {
+    var image = document.getElementById('background');
+    image.onload = function() {
+        var engine = new RainyDay({
+            image: this,
+            parentElement: document.querySelector('#page-home')
+        });
+        engine.trail = engine.TRAIL_SMUDGE;
+        engine.rain([ [4, 6, 0.5] ], 33);
+
+
+        var oCanvas = document.getElementsByTagName('canvas')[0];
+        oCanvas.style.transition = 'all 0.5s ease-out';
+        oCanvas.style.width = window.innerWidth + 500 + 'px';
+
+        oHomePage.onmousemove = function (event) {
+            if(animating){
+                return;
+            }else{
+                animating = true;
+                oCanvas.style.left = event.clientX / window.innerWidth * -500 + 'px';
+                oCanvas.style.top = event.clientY / window.innerHeight * -500 + 'px';
+                setTimeout(function () {
+                    animating = false;
+                }, 200);
+            }
+
+        }
+
+    };
+    image.crossOrigin = 'anonymous';
+    image.src = 'images/bg.jpg';
+}
+
+run();

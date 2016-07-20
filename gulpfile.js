@@ -58,13 +58,18 @@ gulp.task('buildContent', function () {
             let regTag = /\b[a-z]+\b/gi;
             let arrTag = tags.match(regTag);
             let id = new Date(dateAndTime).getTime();
-            let URL = 'posts/' + title;
+            let URL = 'posts/' + title + '.html';
+
+            let preview = content.split('---')[2].slice(0, 200).replace(/\n/g, '') + ' ...';
+
+
             let post = {
                 title: title,
                 dateAndTime: dateAndTime,
                 id: id,
                 tags: arrTag,
-                URL: URL
+                URL: URL,
+                preview: preview
             }
             contents.push(post);
 
@@ -236,8 +241,8 @@ function serve(done) {
             index: 'index.html',
             cache: false
         })
-    ).listen(8000, done);
-    console.log('Server listening on http://localhost:8000/blog/');
+    ).listen(8080, done);
+    console.log('Server listening on http://localhost:8080/blog/');
 }
 
 gulp.task('server', ['build-debug'], serve);

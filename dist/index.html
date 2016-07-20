@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/demo.css"/>
     <link rel="stylesheet" type="text/css" href="css/component.css"/>
-
+    <link rel="stylesheet" href="css/tomorrow.css">
     <script src="js/modernizr-custom.js"></script>
 
 </head>
@@ -23,16 +23,15 @@
 <!-- navigation -->
 <nav class="pages-nav">
     <div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
-    <div class="pages-nav__item"><a class="link link--page" href="#page-content">Content</a></div>
+    <div class="pages-nav__item"><a class="link link--page" href="#page-contents">Contents</a></div>
     <div class="pages-nav__item"><a class="link link--page" href="#page-aboutme">Aboutme</a></div>
 
 
     <div class="pages-nav__item pages-nav__item--social">
-        <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span
-                class="text-hidden">Twitter</span></a>
-        <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
-        <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
-        <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
+        <a class="link link--social link--faded" href="#"><i class="fa fa-weixin"></i></a>
+        <a class="link link--social link--faded" href="#"><i class="fa fa-qq"></i></a>
+        <a class="link link--social link--faded" href="#"><i class="fa fa-github"></i></a>
+        <a class="link link--social link--faded" href="#"><i class="fa fa-envelope"></i></a>
     </div>
 </nav>
 <!-- /navigation-->
@@ -40,10 +39,18 @@
 <div class="pages-stack">
     <!-- page -->
     <div class="page" id="page-home">
-        <h1>home</h1>
+        <img id="background" alt="background" src="" />
+        <h1>其山已几</h1>
+        <h2>燕子来时春雨香,燕子去时秋雨凉</h2>
+
+        <a class="shiny-button contents-link" href="javascript:;">文章列表</a>
+        <a class="shiny-button aboutme-link" href="javascript:;">关于我</a>
+
+        <p>高其凯的前端学习笔记,Powered By Gulp  陕ICP备15013800号-1</p>
+
     </div>
     <!-- /page -->
-    <div class="page" id="page-content">
+    <div class="page" id="page-contents">
         <h1>content</h1>
     </div>
     <div class="page" id="page-aboutme">
@@ -53,6 +60,7 @@
 <!-- /pages-stack -->
 <button class="menu-button"><span>Menu</span></button>
 <script src="js/classie.js"></script>
+<script src="js/rainyday.js"></script>
 <script src="js/main.js"></script>
 <script src="js/utils.js"></script>
 <script>

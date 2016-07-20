@@ -1,3 +1,8 @@
-each item in content
-  li
-    a(class="article-link" onclick="getArticle('" + item.URL + "');")  #{item.title}
+.content
+    h2.contents-logo CONTENTS
+    ul.contents
+      each item in content
+        li
+          a(class="article-link" onclick="getArticle('" + item.URL + "');")  #{item.title}
+          p(class="article-info") #{"发表于 " + item.dateAndTime}
+          p(class="article-preview") #{item.preview}

@@ -19,13 +19,13 @@ function createXMLHTTPRequest() {
         //针对IE6，IE5.5，IE5
         //两个可以用于创建XMLHTTPRequest对象的控件名称，保存在一个js的数组中
         //排在前面的版本较新
-        var activexName = [ "MSXML2.XMLHTTP", "Microsoft.XMLHTTP" ];
-        for ( var i = 0; i < activexName.length; i++) {
+        var activexName = ["MSXML2.XMLHTTP", "Microsoft.XMLHTTP"];
+        for (var i = 0; i < activexName.length; i++) {
             try {
                 //取出一个控件名进行创建，如果创建成功就终止循环
                 //如果创建失败，回抛出异常，然后可以继续循环，继续尝试创建
                 xmlHttpRequest = new ActiveXObject(activexName[i]);
-                if(xmlHttpRequest){
+                if (xmlHttpRequest) {
                     break;
                 }
             } catch (e) {
@@ -34,14 +34,16 @@ function createXMLHTTPRequest() {
     }
     return xmlHttpRequest;
 }
-function doGet(URL){
+function doGet(URL) {
     var req = createXMLHTTPRequest();
-    if(req){
-        req.setRequestHeader("Content-Type", "Content-Type: text/html;charset:utf-8;");
+    if (req) {
         req.open("GET", URL, true);
-        req.onreadystatechange = function(){
-            if(req.readyState == 4){
-                if(req.status == 200){
+        req.setRequestHeader("Content-Type", "text/html;charset:utf-8;");
+        req.setRequestHeader("Accept", "text/html,application/xml,application/json");
+        console.log('hello');
+        req.onreadystatechange = function () {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
                     console.log(req.responseText);
 
                     document.querySelector('#page-contents').innerHTML = req.responseText;
@@ -49,7 +51,7 @@ function doGet(URL){
                         getContent();
                     }
 
-                }else{
+                } else {
                     console.log('error');
                 }
             }
@@ -57,8 +59,8 @@ function doGet(URL){
         req.send(null);
     }
 }
-var getContent = function(){
-    doGet('http://localhost:63343/blog/dist/content.html');
+var getContent = function () {
+    doGet('content.html');
 }
 
 var getArticle = function (URL) {
@@ -71,26 +73,53 @@ var animating = false;
 
 function run() {
     var image = document.getElementById('background');
-    image.onload = function() {
+    image.onload = function () {
         var engine = new RainyDay({
             image: this,
             parentElement: document.querySelector('#page-home')
         });
         engine.trail = engine.TRAIL_SMUDGE;
-        engine.rain([ [4, 6, 0.5] ], 33);
+        engine.rain([[4, 6, 0.5]], 33);
 
 
         var oCanvas = document.getElementsByTagName('canvas')[0];
         oCanvas.style.transition = 'all 0.5s ease-out';
-        oCanvas.style.width = window.innerWidth + 500 + 'px';
+
+        var deltaWidth = 500;
+        var deltaHeight = 0;
+
+        var canvasHeight = 0;
+        var canvasWidth = 0;
+
+        var windowHeight = 0;
+        var windowWidth = 0;
+
 
         oHomePage.onmousemove = function (event) {
-            if(animating){
+            if (animating) {
                 return;
-            }else{
+            } else {
+                if (window.innerHeight != windowHeight || window.innerWidth != windowWidth) {
+                    windowHeight = window.innerHeight;
+                    windowWidth = window.innerWidth;
+                    if (windowHeight / windowWidth > 1120 / 1673) {
+                        oCanvas.style.height = windowHeight + 300 + 'px';
+                    } else {
+                        oCanvas.style.width = windowWidth + 500 + 'px';
+                    }
+
+                    var computedHeight = document.defaultView.getComputedStyle(oCanvas, null).height;
+                    var computedWidth = document.defaultView.getComputedStyle(oCanvas, null).width;
+
+                    canvasHeight = Number.parseInt(computedHeight.slice(0, computedHeight.length - 1));
+                    canvasWidth = Number.parseInt(computedWidth.slice(0, computedWidth.length - 1));
+
+                    deltaHeight = canvasHeight - windowHeight;
+                }
+
                 animating = true;
-                oCanvas.style.left = event.clientX / window.innerWidth * -500 + 'px';
-                oCanvas.style.top = event.clientY / window.innerHeight * -500 + 'px';
+                oCanvas.style.left = event.clientX / windowWidth * -deltaWidth + 'px';
+                oCanvas.style.top = event.clientY / windowHeight * -deltaHeight + 'px';
                 setTimeout(function () {
                     animating = false;
                 }, 200);

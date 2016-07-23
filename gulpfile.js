@@ -225,12 +225,4 @@ function serve(done) {
 gulp.task('server', ['build-debug'], serve);
 gulp.task('preview', ['build'], serve);
 
-// ------------------------
-//  Deploy
-// ------------------------
-gulp.task('deploy', ['build'], function () {
-    return gulp.src(destPath.base + '**/*')
-        .pipe(plugins.ghPages());
-});
-
 gulp.task('default', ['server', 'watch']);

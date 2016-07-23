@@ -132,9 +132,9 @@ function packjs(entry, dest, debug) {
     let p = require(srcPath.webpackPlugins);
 
     if (debug) {
-        webpackConfig.plugins = [p.sourcemap, p.common, p.ignoreLocale];
+        webpackConfig.plugins = [p.sourcemap, p.ignoreLocale];
     } else {
-        webpackConfig.plugins = [p.uglify, p.common, p.ignoreLocale]
+        webpackConfig.plugins = [p.uglify, p.ignoreLocale]
     }
 
     return gulp.src(entry)
@@ -146,28 +146,6 @@ function packjs(entry, dest, debug) {
 gulp.task('js', () => packjs(srcPath.script + 'index.js', destPath.script));
 gulp.task('js-debug', () => packjs(srcPath.script + 'index.js', destPath.script, true));
 
-// --------------------------------
-// PostCSS
-// --------------------------------
-function compileCSS(debug) {
-    let theme = gulp.src('./node_modules/highlight.js/styles/tomorrow.css')
-        .pipe(gulp.dest(destPath.style))
-
-    let processors = [require('cssnext')(), require('cssnano')()];
-
-    let css = gulp.src(srcPath.style + '**/*.css')
-        .pipe(plugins.debug())
-        .pipe(plugins.if(debug, plugins.sourcemaps.init()))
-        .pipe(plugins.postcss(processors))
-        .pipe(plugins.if(debug, plugins.sourcemaps.write()))
-        .pipe(gulp.dest(destPath.style))
-        .pipe(plugins.livereload());
-
-    return merge(theme, css);
-}
-
-gulp.task('css', () => compileCSS());
-gulp.task('css-debug', () => compileCSS(true));
 
 // --------------------------------
 // Generate markup
@@ -222,13 +200,12 @@ gulp.task('watch', ['server'], function () {
     gulp.watch(['./' + submodule + '/**/*.md'], ['markup']);
     gulp.watch([srcPath.template + 'index.jade'], ['index']);
     gulp.watch([srcPath.template + 'layout/*.jade'], ['relayout']);
-    gulp.watch(srcPath.style + '**/*.css', ['css']);
     gulp.watch([srcPath.webpackConfig, srcPath.webpackPlugins,
         srcPath.script + '**/*.js'], ['js-debug']);
 });
 
-gulp.task('build-debug', ['js-debug', 'markup', 'css-debug', 'buildContent']);
-gulp.task('build', ['js', 'markup', 'css', 'buildContent']);
+gulp.task('build-debug', ['js-debug', 'markup' , 'buildContent']);
+gulp.task('build', ['js', 'markup' , 'buildContent']);
 
 // ------------------------
 //  Launch server

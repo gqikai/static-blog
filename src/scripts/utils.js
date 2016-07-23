@@ -1,8 +1,9 @@
 /**
  * Created by gaoqikai on 7/19/16.
  */
+var RainyDay = require('./rainyday').RainyDay;
 
-
+console.log(RainyDay);
 function createXMLHTTPRequest() {
     //1.创建XMLHttpRequest对象
     //这是XMLHttpReuquest对象无部使用中最复杂的一步
@@ -34,23 +35,36 @@ function createXMLHTTPRequest() {
     }
     return xmlHttpRequest;
 }
-function doGet(URL) {
+function doGet(URL, type) {
     var req = createXMLHTTPRequest();
     if (req) {
         req.open("GET", URL, true);
         req.setRequestHeader("Content-Type", "text/html;charset:utf-8;");
         req.setRequestHeader("Accept", "text/html,application/xml,application/json");
-        console.log('hello');
+
         req.onreadystatechange = function () {
             if (req.readyState == 4) {
                 if (req.status == 200) {
-                    console.log(req.responseText);
-
                     document.querySelector('#page-contents').innerHTML = req.responseText;
-                    document.querySelector('.backicon i').onclick = function () {
-                        getContent();
+                    switch (type) {
+                        case 'content':
+                        {
+                            var contents = document.querySelectorAll('.content li a:nth-of-type(1)');
+                            for (var i = 0; i < contents.length; i++) {
+                                contents[i].onclick = function () {
+                                    getArticle(this.getAttribute('data-url'));
+                                }
+                            }
+                            break;
+                        }
+                        case 'article':
+                        {
+                            document.querySelector('.backicon i').onclick = function () {
+                                getContent();
+                            }
+                            break;
+                        }
                     }
-
                 } else {
                     console.log('error');
                 }
@@ -60,18 +74,16 @@ function doGet(URL) {
     }
 }
 var getContent = function () {
-    doGet('content.html');
+    doGet('content.html', 'content');
 }
-
 var getArticle = function (URL) {
-    console.log(URL);
-    doGet(URL);
+    console.log('get article:' + URL);
+    doGet(URL, 'article');
 }
 
-var oHomePage = document.querySelector('#page-home');
-var animating = false;
-
-function run() {
+function initRain() {
+    var oHomePage = document.querySelector('#page-home');
+    var animating = false;
     var image = document.getElementById('background');
     image.onload = function () {
         var engine = new RainyDay({
@@ -132,4 +144,8 @@ function run() {
     image.src = 'images/bg.jpg';
 }
 
-run();
+module.exports = {
+    getContent: getContent,
+    getArticle: getArticle,
+    initRain: initRain
+}

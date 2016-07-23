@@ -3,6 +3,6 @@
     ul.contents
       each item in content
         li
-          a(class="article-link" onclick="getArticle('" + item.URL + "');")  #{item.title}
+          a(class="article-link" data-url=item.URL)  #{item.title}
           p(class="article-info") #{"发表于 " + item.dateAndTime}
           p(class="article-preview") #{item.preview}

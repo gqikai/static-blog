@@ -226,3 +226,32 @@ gulp.task('server', ['build-debug'], serve);
 gulp.task('preview', ['build'], serve);
 
 gulp.task('default', ['server', 'watch']);
+
+/************* less to css  ********************/
+var lessPath = [path.join(__dirname, 'src', 'less', 'includes'),
+    path.join(__dirname, 'src', 'less', 'components')];
+
+function less2css(srcPath, destPath, debug) {
+    if(!debug) {
+        return gulp.src(srcPath)
+            .pipe(plugins.less({ paths: lessPath }))
+            .pipe(plugins.minifyCss({ compatibility: 'ie9' }))
+            .pipe(gulp.dest(destPath));
+    } else {
+        return gulp.src(srcPath)
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.less({ paths: lessPath }))
+            .pipe(plugins.sourcemaps.write())
+            .pipe(gulp.dest(destPath));
+    }
+}
+
+gulp.task('less', function() {
+    less2css('./src/less/questions.less', './dist/questions/');
+    less2css('./src/less/index.less', './dist/');
+});
+
+gulp.task('less-debug', function() {
+    less2css('./src/less/questions.less', './dist/questions/', true);
+    less2css('./src/less/index.less', './dist/', true);
+});

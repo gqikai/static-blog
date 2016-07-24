@@ -1,0 +1,69 @@
+
+.content {
+    margin: 100px auto;
+    max-width: 1024px;
+}
+.contents-logo, .article-header{
+    text-align: center;
+     font-size: 32px;
+}
+
+.article-header {
+    margin-bottom: 30px;
+}
+.contents{
+    margin-top: 33px;
+}
+.contents li {
+    border-top: 1px dashed #ccc;
+    list-style-type: none;
+    padding-bottom: 28px;
+    padding-top: 28px;
+}
+
+.article-link{
+    font-size: 24px;
+    cursor: pointer;
+}
+.article-info{
+    font-size: 14px;
+    margin-left: 20px;
+}
+.article-preview{
+    text-indent: 20px;
+}
+article p:nth-of-type(1){
+    font-size: 24px;
+}
+
+.backicon i {
+    position: absolute;
+    left: 24px;
+    top: 90px;
+    text-shadow: 0 0 10px black;
+    animation-name: bump-in;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(.17,.67,.53,1.51);
+    /*animation-iteration-count: infinite;*/
+    cursor: pointer;
+    animation-fill-mode: forwards;
+}
+
+.backicon i:hover{
+    color: #232323;
+}
+
+
+@keyframes bump-in {
+    0% {
+        transform: scale(0);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+
+
+
+

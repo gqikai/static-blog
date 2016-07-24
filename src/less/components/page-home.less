@@ -1,0 +1,71 @@
+
+#page-home h1 {
+    z-index: 1;
+    margin-top: 100px;
+    color: white;
+    text-shadow: 0px 0 11px black;
+    font-size: 54px;
+    text-align: center}
+
+#page-home h2 {
+    z-index: 1;
+   text-align: center;
+    margin-top: 10px;
+    color: white;
+    text-shadow: 0px 0 11px black;
+    font-size: 30px;
+    margin-bottom: 150px;
+ }
+
+#page-home p {
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+    margin-left: -235px;
+}
+#page-contents{
+    overflow: scroll;
+}
+
+.shiny-button {
+    display: block;
+    width: 150px;
+    text-align: center;
+    margin: 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px white;
+    color: #EEE;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 6px 26px;
+    font-size: 21px;
+    z-index: 1;
+    animation-name: breath;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+
+.shiny-button:hover {
+    color: #FFF;
+}
+
+@keyframes breath {
+    0% {
+        box-shadow: 0 0 30px white;
+    }
+    50% {
+        box-shadow: 0 0 10px white;
+    }
+    100% {
+        box-shadow: 0 0 30px white;
+    }
+}
+#background {
+    position: absolute;
+    z-index: -2;
+}
+canvas {
+    z-index: -1;
+}

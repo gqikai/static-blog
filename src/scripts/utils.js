@@ -114,11 +114,6 @@ function initRain() {
                 if (window.innerHeight != windowHeight || window.innerWidth != windowWidth) {
                     windowHeight = window.innerHeight;
                     windowWidth = window.innerWidth;
-                    if (windowHeight / windowWidth > 1120 / 1673) {
-                        oCanvas.style.height = windowHeight + 300 + 'px';
-                    } else {
-                        oCanvas.style.width = windowWidth + 500 + 'px';
-                    }
 
                     var computedHeight = document.defaultView.getComputedStyle(oCanvas, null).height;
                     var computedWidth = document.defaultView.getComputedStyle(oCanvas, null).width;
